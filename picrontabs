@@ -1,0 +1,10 @@
+# 
+# For more information see the manual pages of crontab(5) and cron(8)
+# 
+# m h  dom mon dow   command
+ 
+# At every minute:
+*/1 * * * * ~/bin/ssh_tunnel_home.sh >> tunnel.log 2>&1
+
+# At 05:(random) on Saturday:
+0 5 * * 6 sleep $((RANDOM*3600/32768)) && ~/bin/aptgetauto.sh >> aptgetauto.log

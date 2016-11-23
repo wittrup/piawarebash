@@ -1,2 +1,15 @@
 ### JetBrains template
 .idea/*
+
+.bash_history
+.bash_logout
+.gitconfig
+.profile
+.selected_editor
+.ssh/
+.vim/
+.viminfo
+
+ssh_tunnel_home.cfg
+*.log
+

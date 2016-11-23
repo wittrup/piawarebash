@@ -31,3 +31,4 @@ sudo apt-get dist-upgrade -y
 #   in /var/cache/apt/archives. You can remove these in order to free up space with
 sudo apt-get clean  -y
 df -h
+date

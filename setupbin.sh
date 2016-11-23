@@ -9,4 +9,3 @@ LINE='PATH="$HOME/bin:$PATH"'
 FILE=$HOME/.bashrc
 grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
 
-ln -s /var/spool/cron/crontabs/$USER $USERcrontab
