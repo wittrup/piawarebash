@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Make this executable by doing the following:
-# chmod 700 ~/ssh_tunnel_home.sh
-
 configfile=$HOME/ssh_tunnel_home.cfg
 configfile_secured='/tmp/ssh_tunnel_home.cfg'
 # Check if the file contains something we don't want
@@ -16,16 +13,31 @@ fi
 source "$configfile"
 
 createTunnel() {
-  /usr/bin/ssh -N -R 2222:localhost:22 -p $port $destination
-  if [[ $? -eq 0 ]]; then
-    echo Tunnel to jumpbox created successfully
-  else
-    echo An error occurred creating a tunnel to jumpbox. RC was $?
-  fi
+    # Split $destionation by ':' into $host and $port
+    IFS=: read -r host port <<< "$destination"
+    # If $port not set use 22 as default
+    if [[ -z "$port" ]]; then
+        port=22
+    fi
+    # If $reverse port not set, then randomly select and write to config
+    if [[ -z "$reverse" ]]; then
+        reverse=$(( ((RANDOM<<15)|RANDOM) % 63001 + 2000 ))
+        echo reverse="$reverse" >> "$configfile"
+    fi
+    # Build pipeline around ssh sub-shell, redirect errors to standard output and write to variable
+    RETURN=$( { /usr/bin/ssh -N -R $reverse:localhost:22 -p $port $host; } 2>&1)
+    # Store return code of last command into variable
+    RESULT=$?
+    # If return code not equals 0 echo return code and message
+    if [[ $RESULT -ne 0 ]]; then
+        echo $(date +"%Y-%m-%d %H:%M:%S") ERROR: $RESULT $RETURN
+    fi
 }
-/bin/pidof ssh
-if [[ $? -ne 0 ]]; then
-  date
-  echo Creating new tunnel connection
-  createTunnel
+
+pid=$(/bin/pidof ssh)
+if [[ $pid -eq 0 ]]; then
+    createTunnel
+else
+    text="Tunnel is up with pid"
+    tail -1 $HOME/tunnel.log | grep -q "$text" || echo $(date +"%Y-%m-%d %H:%M:%S") $text $pid
 fi
