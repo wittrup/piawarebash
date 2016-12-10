@@ -3,6 +3,18 @@
 sudo raspi-config
 ```
 
+**Download this git**
+```bash
+sudo apt-get install git -y
+git config --global user.name "your name"
+git config --global user.email "email@domain.com"
+git init
+git remote add origin https://github.com/wittrup/piawarebash.git
+git fetch --all
+rm .bashrc
+git reset --hard origin/master
+```
+
 **Vim text editor**
 ```bash
 sudo apt-get update -y
@@ -27,31 +39,19 @@ piaware-config wireless-password s3cr3t
 
 **Automatic ssh login using ssh keys**
 ```bash
-cd ~/.ssh
 ssh-keygen -t rsa
+cd ~/.ssh
 cat id_rsa.pub >> authorized_keys
 vim authorized_keys
 # and copy paste them into your receiving server, and test with:
 ssh -N -R 2222:localhost:22 -p <port> <user>@<hostname>
 ```
 
-**Download this git**
-```bash
-sudo apt-get install git -y
-git config --global user.name "your name"
-git config --global user.email "email@domain.com"
-git init
-git remote add origin https://github.com/wittrup/piawarebash.git
-rm .bashrc
-git fetch --all
-git reset --hard origin/master
-```
-
 **Setup scripts: Reverse SSH tunnel (persistent)**
 ```bash
 # Give execution privileges 
 chmod 700 setupbin.sh
-setupbin.sh
+./setupbin.sh
 chmod 700 bin/*.sh
 
 vim ssh_tunnel_home.cfg

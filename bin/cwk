@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 # Connect with Kids
 
+lopo=$1
 if [ -n "$1" ]; then # Argument no 1 is set
-	lopo=$(sudo netstat -tlp | grep localhost | grep -v mysql | grep $1 | awk '{print $4}' | sed 's/[^0-9]*//g')
-	ssh -p $lopo pi@localhost
+    if ! [[ $1 =~ '^[0-9]+$' ]] ; then # Not a number, get from netstat
+        lopo=$(sudo netstat -tlp | grep localhost: | grep sshd | grep $1 | awk '{print $4}' | sed 's/[^0-9]*//g')
+    fi
+    if [[ $lopo =~ ^-?[0-9]+$ ]] ; then # A number, start SSH
+        ssh -p $lopo pi@localhost
+    else
+        echo Cannot determine local port...
+    fi
 else
-	sudo netstat -tlp | grep localhost | grep -v mysql
+    sudo netstat -tlp | grep localhost: | grep sshd | awk '{print $4 "\t\t" $7i " " $8;}'
 fi

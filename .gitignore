@@ -11,3 +11,4 @@
 ssh_tunnel_home.cfg
 *.log
 
+*.cfg

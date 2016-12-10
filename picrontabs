@@ -3,8 +3,8 @@
 SHELL=/bin/bash
 # At 05:(random) on Monday:
 0 5 * * 1 sleep $((RANDOM*3600/32768)) && ${HOME}/bin/aptgetauto.sh >> aptgetauto.log
- 
-# At every minute:
-*/1 * * * * ${HOME}/bin/ssh_tunnel_home.sh >> tunnel.log 2>&1
+
+@reboot ${HOME}/bin/ssh_tunnel_home.sh ${HOME}/phoneaws.cfg >> tunaws.log 2>&1
+@reboot ${HOME}/bin/ssh_tunnel_home.sh ${HOME}/phonehom.cfg >> tunhom.log 2>&1
 
 #@reboot /usr/bin/screen -S radioping -d -m python /home/pi/radio433kit.py

@@ -5,10 +5,10 @@ Just for the record I made a [log of the commands](https://github.com/wittrup/pi
 
 **Features of this setup:**
 - Expand for lagre SD
+- Download this git
 - Vim text editor (what i prefer)
 - Change hostname
 - WiFi setup
 - Automatic ssh login using ssh keys
-- Download this git
 - Setup scripts: Reverse SSH tunnel (persistent)
 
