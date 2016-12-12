@@ -1,14 +1,5 @@
-.*/
-.bash_history
-.bash_logout
-.gitconfig
-.profile
-.selected_editor
-.viminfo
-.Xauthority
-.xsession-errors*
-
-ssh_tunnel_home.cfg
-*.log
+.*
+!.bashrc
 
 *.cfg
+*.log

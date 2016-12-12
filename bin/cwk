@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
 # Connect with Kids
 
+source /etc/os-release
+if [[ $ID_LIKE != "debian" ]]; then
+    numpor="--numeric-ports"
+fi
+
 lopo=$1
+list="sudo netstat -tlpe $numpor | grep 'localhost:\|127.0.0.1' | grep sshd"
 if [ -n "$1" ]; then # Argument no 1 is set
     if ! [[ $1 =~ '^[0-9]+$' ]] ; then # Not a number, get from netstat
-        lopo=$(sudo netstat -tlp | grep localhost: | grep sshd | grep $1 | awk '{print $4}' | sed 's/[^0-9]*//g')
+        lopo=$(eval $list | grep $1 | awk '{print $4}' | cut -d: -f2 | sed 's/[^0-9]*//g')
     fi
     if [[ $lopo =~ ^-?[0-9]+$ ]] ; then # A number, start SSH
         ssh -p $lopo pi@localhost
@@ -12,5 +18,5 @@ if [ -n "$1" ]; then # Argument no 1 is set
         echo Cannot determine local port...
     fi
 else
-    sudo netstat -tlp | grep localhost: | grep sshd | awk '{print $4 "\t\t" $7i " " $8;}'
+    eval $list | awk '{print $4"\t\t"$7i"\t\t"$9;}'
 fi

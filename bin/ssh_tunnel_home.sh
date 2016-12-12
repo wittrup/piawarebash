@@ -31,8 +31,9 @@ fi
 if [[ -n "$keyfile" ]]; then
     identity_file=" -i $keyfile"
 fi
+until ping -c1 www.google.com &>/dev/null; do :; done
 while true; do
-    echo $(date +"%Y-%m-%d %H:%M:%S") Starting tunnel
+    echo $(date +"%Y-%m-%d %H:%M:%S") Starting tunnel with reverse $reverse
     RETURN=$( { /usr/bin/ssh -o ExitOnForwardFailure=yes$identity_file -N -R $reverse:localhost:22 -p $port $host; } 2>&1)
     RESULT=$?
     if [[ $RESULT -ne 0 ]]; then
