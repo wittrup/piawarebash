@@ -61,3 +61,25 @@ crontab -e
 ### Add jobs (found at file picrontabs)
 ```
 LINK: [picrontabs](https://github.com/wittrup/piawarebash/blob/master/picrontabs)
+
+**samba**
+```bash
+sudo apt-get install samba
+
+smbpasswd -a <user_name>
+
+sudo vi /etc/samba/smb.conf
+
+#Scroll down to the end of the file and add these lines:
+
+[<folder_name>]
+path = /home/<user_name>/<folder_name>
+available = yes
+valid users = <user_name>
+read only = no
+browsable = yes
+public = yes
+writable = yes
+
+sudo service smbd restart
+```
