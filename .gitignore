@@ -1,5 +1,5 @@
+#.cache;.config;.dbus;.gstreamer-0.10;.gitconfig;.local;.pip;.ssh;.themes;.bash_*;.profile;.rnd;.selected_editor;.vim*;.Xauthority;.xsession*;
 .*
-!.bashrc
 
 *.cfg
 *.log
