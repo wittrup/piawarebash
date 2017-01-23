@@ -81,19 +81,18 @@ if __name__ == '__main__':
                     data += sock.recv(32)
                 if b'\r\n' in data:
                     pos = data.index(b'\r\n')
-                    data = data[pos + 2:]
                     line = data[:pos].decode(encoding='ascii')
+                    data = data[pos + 2:]
                     telegrams += 1  # Hits reported. Number of updates from aircraft to receiver - regardless of update content.
                     cols = line.split(',')
                     if len(cols) > 4:
                         # Positions reported. Number of aircraft positions reported to receiver.
                         positions += 1 if cols[1] == '3' else 0
-                        if cols[4] not in aircrafts:
+                        if cols[4] not in results[gain][3]:
                             # Number of ICAO 24-bit addresses (Mode-S "hex codes") seen by receiver.
                             # Read more here: en.wikipedia.org/wiki/Aviation_transponder_interrogation_modes
-                            aircrafts.append(cols[4])
+                            results[gain][3].append(cols[4])
             sock.close()
-            results[gain][3].append(aircraft for aircraft in aircrafts if aircraft not in results[gain][3])
             results[gain][0] += telegrams
             results[gain][1] += positions
             results[gain][2] = len(results[gain][3])
@@ -102,8 +101,8 @@ if __name__ == '__main__':
                 print(gain, telegrams, positions, aircrafts, '{:7.2f}'.format(time() - timestart), sep=args.delim)
 
 
-    print("\n%s ===Totals===", date())
-    print(date(), "GAIN", "MSG", "POS", "ADR", "TIME", sep='\t')
+    print("\n ===Totals===", date())
+    print(date(), "GAIN", "MSG", "POS", "ADR", sep='\t')
     for gain in gains:
         (telegrams, positions, aircrafts) = results[gain][:3]
         print(gain, telegrams, positions, aircrafts, sep=args.delim)
