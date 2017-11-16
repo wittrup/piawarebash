@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+end=$((SECONDS+86400))
+
+while [ $SECONDS -lt $end ]; do
+    if [ -n "$1" ] ; then # Argument no 1 is not null, string has length
+        nc localhost 30003 2>&1 | grep $1
+    else
+        nc localhost 30003 2>&1
+    fi
+    sleep 5
+done

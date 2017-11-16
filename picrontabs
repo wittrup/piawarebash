@@ -1,10 +1,15 @@
+# m h  dom mon dow   command
 
 # You need to specify the shell, to ensure that $RANDOM is available.
 SHELL=/bin/bash
 # At 05:(random) on Monday:
 0 5 * * 1 sleep $((RANDOM*3600/32768)) && ${HOME}/bin/aptgetauto.sh >> aptgetauto.log
 
-@reboot ${HOME}/bin/ssh_tunnel_home.sh ${HOME}/phoneaws.cfg >> tunaws.log 2>&1
-@reboot ${HOME}/bin/ssh_tunnel_home.sh ${HOME}/phonehom.cfg >> tunhom.log 2>&1
+@reboot ${HOME}/bin/ssh_tunnel_home.sh ${HOME}/.tun/phoneaws.cfg >> ${HOME}/.tun/tunaws.log 2>&1
 
-#@reboot /usr/bin/screen -S radioping -d -m python /home/pi/radio433kit.py
+# “At 00:00.”
+0 0 * * * ${HOME}/bin/nclp 4787A3 >> "${HOME}/flights/$(date +\%Y\%m\%d).log"
+# “At 00:01.”
+1 0 * * * sudo systemctl restart dump1090-fa
+# “At 23:59.”
+23 59 * * * find ${HOME}/flights/ -size 0 -type f \( ! -iname "$(date +\%Y\%m\%d).log" \) -print0 | xargs -0 rm
